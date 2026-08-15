@@ -24,57 +24,48 @@
 
     <!-- ================= HEADER ================= -->
     <header class="blog-header">
-        <div class="row align-items-center justify-content-between w-100 mx-0">
-            
-            <!-- Logo on the left -->
-            <div class="col-auto pl-0">
-                <a class="blog-header-logo" href="{% url 'home' %}">
-                    Django Blog
-                </a>
-            </div>
+        
+        <!-- Title in center -->
+        <div class="text-center mb-3">
+            <a class="blog-header-logo" href="{% url 'home' %}">
+                Django Blog
+            </a>
+        </div>
 
-            <!-- Auth Buttons on the right -->
-            <div class="col-auto pr-0">
-                <div class="auth-section">
-                    {% if user.is_authenticated %}
-                        <span class="auth-btn" style="background:#f0f0f0; padding:6px 12px; border:1px solid #ddd; border-radius:3px;">
-                            Welcome, {{ user.username }}
-                        </span>
-                        <a class="auth-btn register-btn" href="{% url 'logout' %}">
-                            Logout
-                        </a>
-                    {% else %}
-                        <a class="auth-btn signin-btn" href="{% url 'login' %}">
-                            Sign In
-                        </a>
-                        <a class="auth-btn register-btn" href="{% url 'register' %}">
-                            Register
-                        </a>
-                    {% endif %}
-                </div>
+        <!-- Category Nav & Auth buttons in one row -->
+        <div class="d-flex justify-content-between align-items-center">
+            
+            <!-- Categories on the left side of this row -->
+            <nav class="category-nav">
+                {% for cat in categories %}
+                    <a href="{% url 'category' cat.id %}">
+                        {{ cat.category_name }}
+                    </a>
+                {% endfor %}
+                <a href="{% url 'about' %}">About</a>
+            </nav>
+
+            <!-- Auth Buttons on the right side of this row -->
+            <div class="auth-section" style="display: flex; gap: 10px; align-items: center;">
+                {% if user.is_authenticated %}
+                    <span class="auth-btn" style="background:#f0f0f0; padding:6px 12px; border:1px solid #ddd; border-radius:3px;">
+                        Welcome, {{ user.username }}
+                    </span>
+                    <a class="auth-btn register-btn" href="{% url 'logout' %}">
+                        Logout
+                    </a>
+                {% else %}
+                    <a class="auth-btn signin-btn" href="{% url 'login' %}">
+                        Sign In
+                    </a>
+                    <a class="auth-btn register-btn" href="{% url 'register' %}">
+                        Register
+                    </a>
+                {% endif %}
             </div>
 
         </div>
     </header>
-
-
-    <!-- ================= CATEGORY NAVIGATION ================= -->
-
-    <div class="category-wrapper">
-
-        <nav class="category-nav">
-
-            {% for cat in categories %}
-                <a href="{% url 'category' cat.id %}">
-                    {{ cat.category_name }}
-                </a>
-            {% endfor %}
-
-            <a href="{% url 'about' %}">About</a>
-
-        </nav>
-
-    </div>
 
 
     <!-- ================= MESSAGES ================= -->

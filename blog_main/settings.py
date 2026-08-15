@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-your-secret-key-here'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['your-domain-name.com', '127.0.0.1']
 
@@ -17,7 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',  # <--- ADD THIS BEFORE staticfiles
     'django.contrib.staticfiles',
-    'blog',  # ← Your app
+    'blog', # ← Your app
 ]
 
 MIDDLEWARE = [
