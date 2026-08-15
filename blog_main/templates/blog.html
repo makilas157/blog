@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+
+    <!-- Main Blog Post -->
+    <div class="col-md-8 blog-main">
+
+        <div class="blog-post">
+
+            <h1 class="blog-post-title">{{ single_blog.title }}</h1>
+
+            <p class="blog-post-meta">
+                Posted on {{ single_blog.created_at|date:"F d, Y" }} by 
+                <a href="#">{{ single_blog.author }}</a>
+            </p>
+
+            <!-- ===== CATEGORY BADGE (UPDATED to Yellow) ===== -->
+            <p>
+                <span class="badge badge-warning text-dark">{{ single_blog.category.category_name }}</span>
+            </p>
+
+            <!-- ===== FEATURED IMAGE ===== -->
+            {% if single_blog.featured_image %}
+                <img src="{{ single_blog.featured_image.url }}" 
+                     class="img-fluid mb-3" 
+                     alt="{{ single_blog.title }}"
+                     style="width:100%; max-height:400px; object-fit:cover;">
+            {% endif %}
+
+            <!-- ===== SHORT DESCRIPTION ===== -->
+            {% if single_blog.short_description %}
+                <div class="blog-short-desc text-muted font-italic mb-3" style="border-left: 4px solid #007bff; padding-left: 15px;">
+                    {{ single_blog.short_description }}
+                </div>
+            {% endif %}
+
+            <div class="blog-text">
+                <p>{{ single_blog.blog_body|linebreaks }}</p>
+            </div>
+
+            <!-- ===== COMMENTS SECTION ===== -->
+            <div class="comments-section mt-5">
+
+                <h4>Comments ({{ comment_count }})</h4>
+
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="comment mb-3 p-3" style="background:#f8f9fa; border-radius:5px;">
+                            <p class="comment-text">{{ comment.comment }}</p>
+                            <div class="comment-meta">
+                                By <strong>{{ comment.user }}</strong>
+                                | {{ comment.created_at|timesince }} ago
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <form method="POST" 
+                          action="{% url 'add_comment' single_blog.slug %}" 
+                          class="comment-form">
+                        {% csrf_token %}
+                        <textarea name="comment" 
+                                  class="form-control" 
+                                  placeholder="Write your comment here..." 
+                                  required></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">
+                            Post Comment
+                        </button>
+                    </form>
+                {% else %}
+                    <p>
+                        Please <a href="{% url 'login' %}?next={{ request.path }}">login</a> 
+                        to write a comment!
+                    </p>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===== SIDEBAR (UPDATED to White Boxes) ===== -->
+
+    <aside class="col-md-4 blog-sidebar">
+
+        <!-- Search -->
+        <div class="p-3 mb-3 bg-white border rounded">
+            <h4 class="font-italic">Search</h4>
+            <form method="GET" action="{% url 'search' %}" class="search-form">
+                <input type="text" name="keyword" class="form-control" placeholder="Enter search term...">
+                <button type="submit" class="btn btn-primary">Go!</button>
+            </form>
+        </div>
+
+        <!-- Categories -->
+        <div class="p-3 mb-3 bg-white border rounded">
+            <h4 class="font-italic">Categories</h4>
+            <ol class="list-unstyled mb-0" style="column-count: 2;">
+                {% for cat in categories %}
+                    <li>
+                        <a href="{% url 'category' cat.id %}" style="color:#007bff; text-decoration:none;">
+                            {{ cat.category_name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        <!-- Follow Us -->
+        <div class="p-3 mb-3 bg-white border rounded">
+            <h4 class="font-italic">Follow Us</h4>
+            <ol class="list-unstyled mb-0">
+                {% for link in social_links %}
+                    <li>
+                        <a href="{{ link.link }}" target="_blank" style="color:#007bff; text-decoration:none;">
+                            {{ link.platform }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+    </aside>
+
+</div>
+
+{% endblock %}

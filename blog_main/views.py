@@ -3,6 +3,7 @@ from blog.models import Blog, Category
 
 
 def home(request):
+
     categories = Category.objects.all()
 
     featured_posts = Blog.objects.filter(
@@ -21,4 +22,8 @@ def home(request):
         "posts": posts,
     }
 
-    return render(request, "home.html", context)
+    return render(
+        request,
+        "home.html",
+        context
+    )
