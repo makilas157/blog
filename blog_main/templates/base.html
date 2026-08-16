@@ -24,49 +24,67 @@
 
     <!-- ================= HEADER ================= -->
     <header class="blog-header">
-        
-        <!-- Title in center -->
-        <div class="text-center mb-3">
-            <a class="blog-header-logo" href="{% url 'home' %}">
-                Django Blog
-            </a>
-        </div>
-
-        <!-- Category Nav & Auth buttons in one row -->
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="container">
             
-            <!-- Categories on the left side of this row -->
-            <nav class="category-nav">
-                {% for cat in categories %}
-                    <a href="{% url 'category' cat.id %}">
-                        {{ cat.category_name }}
+            <!-- Row 1: Title, Search, and Auth Buttons -->
+            <div class="row align-items-center justify-content-between mb-2">
+                
+                <!-- Title (Left) -->
+                <div class="col-auto text-left">
+                    <a class="blog-header-logo" href="{% url 'home' %}" style="font-size: 36px; font-weight: bold; color: #212529; text-decoration: none;">
+                        Django Blog
                     </a>
-                {% endfor %}
-                <a href="{% url 'about' %}">About</a>
-            </nav>
+                </div>
 
-            <!-- Auth Buttons on the right side of this row -->
-            <div class="auth-section" style="display: flex; gap: 10px; align-items: center;">
-                {% if user.is_authenticated %}
-                    <span class="auth-btn" style="background:#f0f0f0; padding:6px 12px; border:1px solid #ddd; border-radius:3px;">
-                        Welcome, {{ user.username }}
-                    </span>
-                    <a class="auth-btn register-btn" href="{% url 'logout' %}">
-                        Logout
-                    </a>
-                {% else %}
-                    <a class="auth-btn signin-btn" href="{% url 'login' %}">
-                        Sign In
-                    </a>
-                    <a class="auth-btn register-btn" href="{% url 'register' %}">
-                        Register
-                    </a>
-                {% endif %}
+                <!-- Search Bar (Center) -->
+                <div class="col">
+                    <form method="GET" action="{% url 'search' %}" class="d-flex">
+                        <input type="text" name="keyword" class="form-control" placeholder="Enter search term...">
+                        <button type="submit" class="btn btn-warning ml-2" style="background-color:#ffc107; color:black;">
+                            Go!
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Auth Buttons (Right) -->
+                <div class="col-auto text-right">
+                    <div class="auth-section" style="display: flex; justify-content: flex-end; gap: 10px; align-items: center;">
+                        {% if user.is_authenticated %}
+                            <span style="font-size: 14px;">You are logged in as {{ user.username }}</span>
+                            <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link" style="color: #007bff; text-decoration: none; padding: 0; border: none; background: none; cursor: pointer;">
+                                    Logout
+                                </button>
+                            </form>
+                        {% else %}
+                            <a class="auth-btn signin-btn" href="{% url 'login' %}">
+                                Login
+                            </a>
+                            <a class="auth-btn register-btn" href="{% url 'register' %}">
+                                Register
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Row 2: Categories -->
+            <div class="row">
+                <div class="col-12 text-center">
+                    <nav class="category-nav d-flex justify-content-center flex-wrap" style="gap: 20px;">
+                        {% for cat in categories %}
+                            <a href="{% url 'category' cat.id %}" style="color:#555; text-decoration:none; font-size:14px;">
+                                {{ cat.category_name }}
+                            </a>
+                        {% endfor %}
+                    </nav>
+                </div>
             </div>
 
         </div>
     </header>
-
 
     <!-- ================= MESSAGES ================= -->
 

@@ -1,29 +1,20 @@
-from django.shortcuts import render
-from blog.models import Blog, Category
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import login
+from .forms import CustomUserCreationForm
 
-
-def home(request):
-
-    categories = Category.objects.all()
-
-    featured_posts = Blog.objects.filter(
-        is_featured=True,
-        status="Published"
-    )
-
-    posts = Blog.objects.filter(
-        is_featured=False,
-        status="Published"
-    )
-
-    context = {
-        "categories": categories,
-        "featured_posts": featured_posts,
-        "posts": posts,
-    }
-
-    return render(
-        request,
-        "home.html",
-        context
-    )
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, '✅ Registration successful!')
+            return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+    
+    return render(request, 'register.html', {
+        'form': form,
+        'active_page': 'register',
+    })

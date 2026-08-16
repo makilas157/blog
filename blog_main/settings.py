@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',  # <--- ADD THIS BEFORE staticfiles
     'django.contrib.staticfiles',
     'blog', # ← Your app
+    'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -95,3 +97,5 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

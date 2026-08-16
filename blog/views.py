@@ -2,10 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from django.contrib.auth.forms import UserCreationForm
+from django.core.paginator import Paginator
+from .forms import CustomUserCreationForm
 from django.contrib.auth import login
-from django.core.paginator import Paginator  # <--- IMPORTANT: NEW IMPORT
 from .models import Blog, Category, Comment, AboutUs, SocialLink
+from django.views import View
+from django.contrib.auth.forms import AuthenticationForm
 
 
 def home(request):
@@ -116,22 +118,35 @@ def search(request):
     return render(request, 'home.html', context)
 
 
-def register(request):
-    """User registration"""
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+# ================= Register View =================
+class RegisterView(View):
+    def get(self, request):
+        form = CustomUserCreationForm()
+        return render(request, 'register.html', {'form': form})
+
+    def post(self, request):
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             messages.success(request, '✅ Registration successful!')
             return redirect('home')
-    else:
-        form = UserCreationForm()
-    
-    return render(request, 'register.html', {
-        'form': form,
-        'active_page': 'register',
-    })
+        return render(request, 'register.html', {'form': form})
+
+
+# ================= Login View =================
+class LoginView(View):
+    def get(self, request):
+        form = AuthenticationForm()
+        return render(request, 'login.html', {'form': form})
+
+    def post(self, request):
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+        return render(request, 'login.html', {'form': form})
 
 
 def about_us(request):
