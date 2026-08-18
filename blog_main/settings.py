@@ -5,9 +5,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-your-secret-key-here'
 
-DEBUG = True
+DEBUG = False  # <--- Change to False for Production
 
-ALLOWED_HOSTS = ['your-domain-name.com', '127.0.0.1']
+ALLOWED_HOSTS = ['your-domain-name.com', '127.0.0.1', 'django-blog.onrender.com']  # <--- Add Render domain
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -15,16 +15,16 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',  # <--- ADD THIS BEFORE staticfiles
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-    'blog', # ← Your app
+    'blog',
     'crispy_forms',
     'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # <--- ADD THIS AFTER SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -38,7 +38,9 @@ ROOT_URLCONF = 'blog_main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'blog_main' / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'blog_main' / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -48,6 +50,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'blog.context_processor.categories_processor',
                 'blog.context_processor.social_links_processor',
+                'blog.context_processor.about_processor',
             ],
         },
     },
@@ -84,10 +87,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'blog_main' / 'static']
-
-# ================= STATIC FILES PRODUCTION SETTINGS =================
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # <--- ADD THIS for collectstatic
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # <--- ADD THIS
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

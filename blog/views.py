@@ -156,3 +156,18 @@ def about_us(request):
         'about': about,
         'active_page': 'about',
     })
+
+
+# ================= NEW: Dashboard View =================
+# ================= Dashboard View =================
+@login_required
+def dashboard(request):
+    categories_count = Category.objects.all().count()
+    posts_count = Blog.objects.all().count()
+
+    context = {
+        'categories_count': categories_count,
+        'posts_count': posts_count,
+    }
+
+    return render(request, 'dashboard/dashboard.html', context)

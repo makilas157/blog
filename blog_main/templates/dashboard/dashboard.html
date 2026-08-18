@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row mt-3">
+
+    <!-- Left Sidebar -->
+    <div class="col-md-3">
+        <div class="list-group">
+
+            <a href="{% url 'dashboard' %}"
+               class="list-group-item list-group-item-action bg-warning font-weight-bold">
+                Dashboard
+            </a>
+
+            <a href="#"
+               class="list-group-item list-group-item-action">
+                Categories
+            </a>
+
+            <a href="#"
+               class="list-group-item list-group-item-action">
+                Posts
+            </a>
+
+            <a href="/accounts/logout/"
+               class="list-group-item list-group-item-action">
+                Logout
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Right Content -->
+    <div class="col-md-9">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="card">
+
+                    <div class="card-header text-center font-weight-bold">
+                        ALL CATEGORIES
+                    </div>
+
+                    <div class="card-body text-center">
+                        <h3>{{ categories_count }}</h3>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+
+                    <div class="card-header text-center font-weight-bold">
+                        ALL POSTS
+                    </div>
+
+                    <div class="card-body text-center">
+                        <h3>{{ posts_count }}</h3>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

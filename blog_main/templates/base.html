@@ -4,113 +4,269 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Django Blog</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <!-- ================= BOOTSTRAP CSS ================= -->
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    >
+
+
+    <!-- ================= GOOGLE FONT ================= -->
+
+    <link
+        href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900"
+        rel="stylesheet"
+    >
+
+
+    <!-- ================= CUSTOM CSS ================= -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/blog.css' %}"
+    >
+
 </head>
+
 
 <body>
 
 <div class="container">
 
-    <!-- ================= HEADER ================= -->
+
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
+
     <header class="blog-header">
+
         <div class="container">
-            
-            <!-- Row 1: Title, Search, and Auth Buttons -->
-            <div class="row align-items-center justify-content-between mb-2">
-                
-                <!-- Title (Left) -->
-                <div class="col-auto text-left">
-                    <a class="blog-header-logo" href="{% url 'home' %}" style="font-size: 36px; font-weight: bold; color: #212529; text-decoration: none;">
+
+            <!-- ================= TOP ROW ================= -->
+
+            <div class="row align-items-center mb-3">
+
+
+                <!-- BLOG TITLE -->
+
+                <div class="col-md-4">
+
+                    <a
+                        href="{% url 'home' %}"
+                        class="blog-header-logo"
+                        style="
+                            font-size: 36px;
+                            font-weight: bold;
+                            color: #212529;
+                            text-decoration: none;
+                        "
+                    >
                         Django Blog
                     </a>
+
                 </div>
 
-                <!-- Search Bar (Center) -->
-                <div class="col">
-                    <form method="GET" action="{% url 'search' %}" class="d-flex">
-                        <input type="text" name="keyword" class="form-control" placeholder="Enter search term...">
-                        <button type="submit" class="btn btn-warning ml-2" style="background-color:#ffc107; color:black;">
+
+                <!-- ================= SEARCH ================= -->
+
+                <div class="col-md-5">
+
+                    <form
+                        method="GET"
+                        action="{% url 'search' %}"
+                        class="form-inline"
+                    >
+
+                        <input
+                            type="text"
+                            name="keyword"
+                            class="form-control"
+                            placeholder="Enter search term..."
+                            style="width: 250px;"
+                        >
+
+                        <button
+                            type="submit"
+                            class="btn btn-warning ml-2"
+                        >
                             Go!
                         </button>
+
                     </form>
+
                 </div>
 
-                <!-- Auth Buttons (Right) -->
-                <div class="col-auto text-right">
-                    <div class="auth-section" style="display: flex; justify-content: flex-end; gap: 10px; align-items: center;">
-                        {% if user.is_authenticated %}
-                            <span style="font-size: 14px;">You are logged in as {{ user.username }}</span>
-                            <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-link" style="color: #007bff; text-decoration: none; padding: 0; border: none; background: none; cursor: pointer;">
-                                    Logout
-                                </button>
-                            </form>
-                        {% else %}
-                            <a class="auth-btn signin-btn" href="{% url 'login' %}">
-                                Login
-                            </a>
-                            <a class="auth-btn register-btn" href="{% url 'register' %}">
-                                Register
-                            </a>
-                        {% endif %}
-                    </div>
+
+                <!-- ================= AUTH ================= -->
+
+                <div class="col-md-3 text-right">
+
+                    {% if user.is_authenticated %}
+
+                        <!-- LOGGED IN -->
+
+                        <form
+                            method="POST"
+                            action="{% url 'logout' %}"
+                            style="display: inline;"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="btn btn-link"
+                                style="
+                                    color: #007bff;
+                                    text-decoration: none;
+                                    padding: 6px 12px;
+                                "
+                            >
+                                Logout
+                            </button>
+
+                        </form>
+
+
+                    {% else %}
+
+                        <!-- NOT LOGGED IN -->
+
+                        <a
+                            href="{% url 'login' %}"
+                            class="auth-btn signin-btn"
+                        >
+                            Login
+                        </a>
+
+
+                        <a
+                            href="{% url 'register' %}"
+                            class="auth-btn register-btn"
+                        >
+                            Register
+                        </a>
+
+                    {% endif %}
+
                 </div>
 
             </div>
 
-            <!-- Row 2: Categories -->
+
+            <!-- ================= CATEGORY ROW ================= -->
+
             <div class="row">
-                <div class="col-12 text-center">
-                    <nav class="category-nav d-flex justify-content-center flex-wrap" style="gap: 20px;">
+
+                <div class="col-12">
+
+                    <nav
+                        class="category-nav d-flex justify-content-center flex-wrap"
+                        style="gap: 20px;"
+                    >
+
                         {% for cat in categories %}
-                            <a href="{% url 'category' cat.id %}" style="color:#555; text-decoration:none; font-size:14px;">
+
+                            <a
+                                href="{% url 'category' cat.id %}"
+                                style="
+                                    color: #555;
+                                    text-decoration: none;
+                                    font-size: 14px;
+                                "
+                            >
                                 {{ cat.category_name }}
                             </a>
+
                         {% endfor %}
+
                     </nav>
+
                 </div>
+
             </div>
 
         </div>
+
     </header>
 
-    <!-- ================= MESSAGES ================= -->
+
+    <!-- ================================================= -->
+    <!-- MESSAGES -->
+    <!-- ================================================= -->
 
     {% if messages %}
-        <div class="messages">
+
+        <div class="messages mt-3">
+
             {% for message in messages %}
-                <div class="alert alert-{% if message.tags == 'success' %}success{% else %}danger{% endif %} alert-dismissible fade show" role="alert">
+
+                <div
+                    class="
+                        alert
+                        {% if message.tags == 'success' %}
+                            alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}
+                        alert-dismissible
+                        fade
+                        show
+                    "
+                    role="alert"
+                >
+
                     {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+
+
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="alert"
+                        aria-label="Close"
+                    >
+
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+
                     </button>
+
                 </div>
+
             {% endfor %}
+
         </div>
+
     {% endif %}
 
 
-    <!-- ================= CONTENT ================= -->
+    <!-- ================================================= -->
+    <!-- PAGE CONTENT -->
+    <!-- ================================================= -->
 
     {% block content %}
+
     {% endblock %}
 
 
-    <!-- ================= FOOTER ================= -->
+    <!-- ================================================= -->
+    <!-- FOOTER -->
+    <!-- ================================================= -->
 
-    <footer class="blog-footer">
+    <footer class="blog-footer mt-4">
 
         <p>
             Django blog built with ❤️ by Rathan Kumar
@@ -118,11 +274,23 @@
 
     </footer>
 
+
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ================================================= -->
+<!-- BOOTSTRAP JAVASCRIPT -->
+<!-- ================================================= -->
+
+<script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+</script>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js">
+</script>
+
 
 </body>
 
